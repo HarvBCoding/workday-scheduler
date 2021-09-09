@@ -10,12 +10,19 @@ const checkHour = () => {
     let currentHour = moment().hour();
 
     // for each hour element turn it into an int
-    let hourEl = $(".hour")
-     .attr("id")
-     .replace("hour", "");
-    let hour = parseInt(hourEl)
+    // let hourEl = $(".hour")
+    //  .attr("id")
+    //  .replace("hour", "");
+    // let hour = parseInt(hourEl)
 
-    console.log(hour);
+    $(".hour").each(function(){
+        let hourEl = $(".hour")
+            .attr("id")
+            .replace("hour", "");
+        let hour = parseInt(hourEl)
+        console.log(hour);
+    })
+    // console.log(hour);
 
     
     // if the hour is less than the current hour, add .past class
