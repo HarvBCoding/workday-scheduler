@@ -8,27 +8,24 @@ $("#currentDay").text(currentDate);
 const checkHour = () => {
     // get the current hour
     let currentHour = moment().hour();
-
-    // for each hour element turn it into an int
-    // let hourEl = $(".hour")
-    //  .attr("id")
-    //  .replace("hour", "");
-    // let hour = parseInt(hourEl)
-
-    $(".hour").each(function(){
-        let hourEl = $(".hour")
-            .attr("id")
-            .replace("hour", "");
-        let hour = parseInt(hourEl)
-        console.log(hour);
+    $(".description").each(function(){
+        let hourSection = parseInt($(this).attr("id").split("-")[1]);
+        
+        if(hourSection < currentHour){
+            $(this)
+                .addClass("past")
+        } else if (hourSection === currentHour){
+            $(this)
+                .removeClass("past")
+            $(this)
+                .addClass("present")
+        } else if (hourSection > currentHour){
+            $(this)
+                .removeClass("past present")
+            $(this)
+                .addClass("future");
+        }
     })
-    // console.log(hour);
-
-    
-    // if the hour is less than the current hour, add .past class
-    // if the hour is equal to the current hour, add .present class
-    // if the hour is greater than current hour, add .future class
-    
 }
 
 checkHour();
