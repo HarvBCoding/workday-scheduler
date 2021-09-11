@@ -14,3 +14,5 @@ https://harvbcoding.github.io/workday-scheduler/
 ## Contribution
 Made by Breania (Bre) Harvey
 
+![SchedulerScreenshot](./Assets/images/05-third-party-apis-homework-demo.gif)
+
