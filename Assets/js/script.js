@@ -1,37 +1,79 @@
-let now = moment();
-let currentDate = now.format("dddd, MMMM Do");
-$("#currentDay").text(currentDate);
-
-// depending on if the current time or moment is with in or past the set times for past present and future classes should be added and removed
-// past(grey), current(red), future(green)
-
-const checkHour = () => {
-    // get the current hour
-    let currentHour = moment().hour();
-    $(".description").each(function(){
-        let hourSection = parseInt($(this).attr("id").split("-")[1]);
-        
-        if(hourSection < currentHour){
-            $(this)
-                .addClass("past")
-        } else if (hourSection === currentHour){
-            $(this)
-                .removeClass("past")
-            $(this)
-                .addClass("present")
-        } else if (hourSection > currentHour){
-            $(this)
-                .removeClass("past present")
-            $(this)
-                .addClass("future");
+$(document).ready(function () {
+    const hours = [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
+    let body = document.body;
+    const now = new Date();
+    const options = { weekday: 'long', month: 'long', day: 'numeric'};
+    const currentHour = now.getHours();
+    
+  
+    $("#currentDay").text(getFormattedDate());
+    function getFormattedDate() {
+      return now.toLocaleDateString("en-US", options);
+    }
+    
+    function displayHour(hour) {
+        if (hour > 12) {
+        return (hour - 12) + "PM";
+        } else if (hour === 12) {
+            return "12PM";
+        } else {
+            return hour + "AM";
         }
-    })
-}
+        
+    }
+  
+    function getRow(hour) {
+        let rowDiv = document.createElement("div");
+        rowDiv.setAttribute("class", "row time-block");
+        rowDiv.setAttribute("id", `hour-${hour}`);
 
-checkHour();
+        let labelDiv = document.createElement("div");
+        labelDiv.setAttribute("class", "col-md-1 hour");
+        labelDiv.setAttribute("id", `hour-${hour}-label`);
+        labelDiv.textContent = displayHour(hour);
 
 
+        let textArea = document.createElement("textarea");
+        textArea.setAttribute("class", "col-md-10 description past");
+        textArea.setAttribute("id", `textarea-${hour}`);
+        if (localStorage.getItem(hour)){
+            textArea.textContent = localStorage.getItem(hour);
+        }
+
+        
+        if (hour === currentHour) {
+            textArea.classList.remove("past")
+            textArea.classList.add("present");
+        } else if (hour > currentHour) {
+            textArea.classList.remove("past", "present")
+            textArea.classList.add("future");
+        }
 
 
-// save function to save tasks to local storage
-// function localstorage takes 2 arguments (name of array, JSON.stringify(arrayName))
+        let saveBtn = document.createElement("button");
+        saveBtn.setAttribute("id", `btn-${hour}`);
+        saveBtn.setAttribute("class", "btn saveBtn col-md-1");
+        saveBtn.addEventListener("click", function(){
+            const appointment = document.querySelector(`#textarea-${hour}`).value;
+            localStorage.setItem(hour, appointment);
+        })
+        
+        let icon = document.createElement("i");
+        icon.setAttribute("class", "fas fa-save");
+
+        body.appendChild(rowDiv);
+
+        rowDiv.appendChild(labelDiv);
+        rowDiv.appendChild(textArea);
+        rowDiv.appendChild(saveBtn);
+        saveBtn.appendChild(icon);
+        
+    }
+
+    // function to check time and apply past, present or future
+
+    
+    for (let i = 0; i < hours.length; i++) {
+      getRow(hours[i]);
+    }
+  });
